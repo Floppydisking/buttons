@@ -1,0 +1,43 @@
+from gpiozero import Button, LED
+from time import sleep
+from datetime import datetime
+
+button = Button(22)
+redled = LED(17)
+blueled = LED(27)
+#button2 = Button(27)
+
+redled.on()
+
+WATERING = 'off'
+
+w_time = []
+
+def main():
+    while True:
+        button.when_pressed = wateringg
+
+
+def wateringg():
+    global WATERING
+    if WATERING == 'on':
+        now = datetime.today()
+        w_time.append(now)
+        duration = w_time[1] - w_time[0]
+        WATERING = 'off'
+        blueled.off()
+        redled.on()
+        print("Watering ended at: {h:02d}:{m:02d} {s:02d}".format(h=now.hour, m=now.minute, s=now.second))
+        print(f"Watered for: {duration}")
+        w_time.clear()
+        sleep(1)
+    elif WATERING == 'off':
+        now = datetime.today()
+        w_time.append(now)
+        WATERING = 'on'
+        redled.off()
+        blueled.on()
+        print("Watering started at: {h:02d}:{m:02d} {s:02d}".format(h=now.hour, m=now.minute, s=now.second))
+        sleep(1)
+        
+main()
